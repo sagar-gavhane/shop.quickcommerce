@@ -1,0 +1,27 @@
+server:
+    port: 9010
+spring:
+    application:
+        name: CATALOG_SERVICE
+    datasource:
+        url: jdbc:postgresql://localhost:5432/qc_catalog_dev_db
+        username: postgres
+        password: postgres
+        driver-class-name: org.postgresql.Driver
+    jpa:
+        show-sql: true
+        hibernate:
+            ddl-auto: update
+        properties:
+            hibernate:
+                format_sql: false
+management:
+    endpoints:
+        web:
+            exposure:
+                include=*:
+eureka:
+    instance:
+        client:
+            serviceUrl:
+                defaultZone: http://localhost:8761/eurek

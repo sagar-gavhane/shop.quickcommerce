@@ -1,0 +1,25 @@
+server:
+    port: 8080
+spring:
+    application:
+        name: API_GATEWAY
+    cloud:
+        gateway:
+            routes[0]:
+                id: CATALOG_SERVICE
+                uri: lb://CATALOG_SERVICE
+                predicates[0]: Path=/api/catalogs/**
+#            routes[1]:
+#                id: ORDER-SERVICE
+#                uri: lb://ORDER-SERVICE
+#                predicates[0]: Path=/api/orders/**
+management:
+    endpoints:
+        web:
+            exposure:
+                include=*:
+eureka:
+    instance:
+        client:
+            serviceUrl:
+                defaultZone: http://localhost:8761/eureka
