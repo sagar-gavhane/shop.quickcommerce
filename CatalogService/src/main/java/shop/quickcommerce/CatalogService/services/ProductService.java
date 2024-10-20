@@ -8,6 +8,7 @@ import org.springframework.stereotype.Service;
 import shop.quickcommerce.CatalogService.entities.Brand;
 import shop.quickcommerce.CatalogService.entities.Category;
 import shop.quickcommerce.CatalogService.entities.Product;
+import shop.quickcommerce.CatalogService.mappers.ProductMapper;
 import shop.quickcommerce.CatalogService.repositories.BrandRepository;
 import shop.quickcommerce.CatalogService.repositories.CategoryRepository;
 import shop.quickcommerce.CatalogService.repositories.ProductRepository;
@@ -22,24 +23,31 @@ public class ProductService {
     private final CategoryRepository categoryRepository;
     private final BrandRepository brandRepository;
     private final ModelMapper modelMapper;
+    private final ProductMapper productMapper;
 
     public ProductService(
             ProductRepository productRepository,
             CategoryRepository categoryRepository,
             BrandRepository brandRepository,
-            ModelMapper modelMapper
+            ModelMapper modelMapper,
+            ProductMapper productMapper
     ) {
         this.productRepository = productRepository;
         this.categoryRepository = categoryRepository;
         this.brandRepository = brandRepository;
         this.modelMapper = modelMapper;
+        this.productMapper = productMapper;
     }
 
     public List<ProductDto> getProducts(Optional<Integer> page, Optional<Integer> pageSize) {
         Page<Product> products = productRepository.findAll(PageRequest.of(page.orElse(0), pageSize.orElse(10)));
 
         return products.getContent().stream()
-                .map(product -> modelMapper.map(product, ProductDto.class))
+                .map(product -> {
+                    ProductDto productDto = modelMapper.map(product, ProductDto.class);
+
+                    return productDto;
+                })
                 .toList();
     }
 
@@ -63,8 +71,8 @@ public class ProductService {
 
         Product product = modelMapper.map(productDto, Product.class);
 
-        product.setCategory(category);
-        product.setBrand(brand);
+//        product.setCategory(category);
+//        product.setBrand(brand);
 
         Product savedProduct = productRepository.save(product);
         return modelMapper.map(savedProduct, ProductDto.class);
@@ -88,5 +96,17 @@ public class ProductService {
                 .stream()
                 .map(product -> modelMapper.map(product, ProductDto.class))
                 .toList();
+    }
+
+    public ProductDto updateProduct(Long productId, ProductDto productDto) {
+        Product product = productRepository
+                .findById(productId)
+                .orElseThrow(() -> new IllegalArgumentException("Product not found with id: " + productId));
+
+        productMapper.updateUserFromDto(modelMapper.map(productDto, Product.class), product);
+
+        System.out.println(product);
+
+        return productDto;
     }
 }

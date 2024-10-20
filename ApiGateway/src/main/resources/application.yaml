@@ -2,17 +2,17 @@ server:
     port: 8080
 spring:
     application:
-        name: API_GATEWAY
+        name: API-GATEWAY
     cloud:
         gateway:
-            routes[0]:
-                id: CATALOG_SERVICE
-                uri: lb://CATALOG_SERVICE
-                predicates[0]: Path=/api/catalogs/**
-#            routes[1]:
-#                id: ORDER-SERVICE
-#                uri: lb://ORDER-SERVICE
-#                predicates[0]: Path=/api/orders/**
+            enabled: true
+            routes:
+                -   id: catalog-service
+                    uri: lb://CATALOG-SERVICE
+                    predicates:
+                        - Path=/api/catalogs/**
+                    filters:
+                        - StripPrefix=1 # Removes the /api prefix before forwarding to the backend
 management:
     endpoints:
         web:

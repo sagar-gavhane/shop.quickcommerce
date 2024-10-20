@@ -9,7 +9,7 @@ import java.util.List;
 import java.util.Optional;
 
 @RestController
-@RequestMapping("/api/catalogs/products")
+@RequestMapping("/catalogs/products")
 public class ProductController {
     private final ProductService productService;
 
@@ -47,6 +47,12 @@ public class ProductController {
     @PostMapping
     public ResponseEntity<ProductDto> addProduct(@RequestBody ProductDto productDto) {
         ProductDto product = productService.addProduct(productDto);
+        return ResponseEntity.ok(product);
+    }
+
+    @PatchMapping("/{productId}")
+    public ResponseEntity<ProductDto> updateProduct(@PathVariable Long productId, @RequestBody ProductDto productDto) {
+        ProductDto product = productService.updateProduct(productId, productDto);
         return ResponseEntity.ok(product);
     }
 }

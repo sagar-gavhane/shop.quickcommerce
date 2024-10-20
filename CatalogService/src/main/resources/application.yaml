@@ -2,7 +2,7 @@ server:
     port: 9010
 spring:
     application:
-        name: CATALOG_SERVICE
+        name: CATALOG-SERVICE
     datasource:
         url: jdbc:postgresql://localhost:5432/qc_catalog_dev_db
         username: postgres
@@ -24,4 +24,4 @@ eureka:
     instance:
         client:
             serviceUrl:
-                defaultZone: http://localhost:8761/eurek
+                defaultZone: http://localhost:8761/eureka
