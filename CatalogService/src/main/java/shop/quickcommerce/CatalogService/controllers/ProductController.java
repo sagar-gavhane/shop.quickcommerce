@@ -6,6 +6,7 @@ import shop.quickcommerce.CatalogService.services.ProductService;
 import shop.quickcommerce.Shared.dtos.ProductDto;
 
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 
 @RestController
@@ -42,6 +43,18 @@ public class ProductController {
     public ResponseEntity<ProductDto> getProduct(@PathVariable Long productId) {
         ProductDto product = productService.getProductById(productId);
         return ResponseEntity.ok(product);
+    }
+
+    @GetMapping("/search")
+    public ResponseEntity<Map<String, Object>> searchProductsByNameOrDescription(@RequestParam("query") String query) {
+        Map<String, Object> result = productService.searchProductsByNameOrDescription(query);
+        return ResponseEntity.ok(result);
+    }
+
+    @GetMapping("/advance-search")
+    public ResponseEntity<Map<String, Object>> advanceSearch(@RequestParam("query") String query, @RequestParam(name = "page", defaultValue = "0") Integer page, @RequestParam(name = "pageSize", defaultValue = "25") Integer pageSize) {
+        Map<String, Object> result = productService.advanceSearch(query, page, pageSize);
+        return ResponseEntity.ok(result);
     }
 
     @PostMapping

@@ -17,7 +17,10 @@ public class Product {
     private Long productId;
 
     private String name;
+
+    @Column(columnDefinition = "TEXT")
     private String description;
+    
     private Float marketPrice;
     private Float salePrice;
     private String imageUrl;
